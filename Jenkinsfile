@@ -1,4 +1,6 @@
 def registry = 'https://gowrepo.jfrog.io/'
+def imageName = 'gowrepo.jfrog.io/dpp-tweet-docker-local/ttrend'
+def version   = '2.1.2'
 pipeline {
     agent {
         node {
@@ -25,30 +27,30 @@ environment {
             }
         }
 
-        stage('SonarQube analysis') {
-        environment {
-            scannerHome = tool 'sonar-scanner'
-        }
-            steps{
-                withSonarQubeEnv('sonarqube-server') { // If you have configured more than one global server connection, you can specify its name
-                  sh "${scannerHome}/bin/sonar-scanner"
-                }
-              }
-            }
+        // stage('SonarQube analysis') {
+        // environment {
+        //     scannerHome = tool 'sonar-scanner'
+        // }
+        //     steps{
+        //         withSonarQubeEnv('sonarqube-server') { // If you have configured more than one global server connection, you can specify its name
+        //           sh "${scannerHome}/bin/sonar-scanner"
+        //         }
+        //       }
+        //     }
 			
-        stage("Quality Gate"){
-            steps{
-                script{
+        // stage("Quality Gate"){
+        //     steps{
+        //         script{
 
-                  timeout(time: 1, unit: 'HOURS') { // Just in case something goes wrong, pipeline will be killed after a timeout
-                    def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
-                    if (qg.status != 'OK') {
-                      error "Pipeline aborted due to quality gate failure: ${qg.status}"
-                    }
-                  }
-                        }
-        }         
-        }
+        //           timeout(time: 1, unit: 'HOURS') { // Just in case something goes wrong, pipeline will be killed after a timeout
+        //             def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
+        //             if (qg.status != 'OK') {
+        //               error "Pipeline aborted due to quality gate failure: ${qg.status}"
+        //             }
+        //           }
+        //                 }
+        // }         
+        // }
 
         stage("Jar Publish") {
             steps {
@@ -71,10 +73,32 @@ environment {
                          buildInfo.env.collect()
                          server.publishBuildInfo(buildInfo)
                          echo '<--------------- Jar Publish Ended --------------->'  
-                
                 }
             }   
-    }   
+    }
+
+
+        stage(" Docker Build ") {
+            steps {
+                script {
+                  echo '<--------------- Docker Build Started --------------->'
+                  app = docker.build(imageName+":"+version)
+                  echo '<--------------- Docker Build Ends --------------->'
+               }
+             }
+           }
+        
+        stage (" Docker Publish "){
+            steps {
+                script {
+                   echo '<--------------- Docker Publish Started --------------->'  
+                    docker.withRegistry(registry, 'artifact-cred'){
+                        app.push()
+                    }    
+                   echo '<--------------- Docker Publish Ended --------------->'  
+                }
+            }
+        }	
     
 }
         

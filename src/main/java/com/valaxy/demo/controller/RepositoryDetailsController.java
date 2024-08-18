@@ -1,6 +1,9 @@
 package com.stalin.demo.controller;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Scanner;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,19 +34,29 @@ public class RepositoryDetailsController {
     public String getRepos() throws IOException {
         GitHub github = new GitHubBuilder().withPassword("valaxytech@gmail.com", "XXXXXXXX").build();
         GHRepositorySearchBuilder builder = github.searchRepositories();
+
+        String publicIp = getPublicIp();
         return "Welcome to BigID Project-4\n" +
-               "              _________\n" +
-               "     / ======= \\\n" +
-               "    / __________\\\n" +
-               "   | ___________ |\n" +
-               "   | | -       | |\n" +
-               "   | |         | |\n" +
-               "   | |_________| |________________________\n" +
-               "   \\=____________/   BigID CI/CD Project      )\n" +
-               "    / \"\"\"\"\"\"\"\"\"\"\"\" \\                       /\n" +
-               "   / ::::::::::::: \\                  =D-'\n" +
-               "  (_________________)\n" +
-               "   ______________\n";
+               "Your public IP address is: " + publicIp;
+    }
+
+    private String getPublicIp() {
+        String ip = "Unable to fetch IP";
+        try {
+            URL url = new URL("https://api.ipify.org");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.connect();
+
+            Scanner scanner = new Scanner(url.openStream());
+            if (scanner.hasNext()) {
+                ip = scanner.nextLine();
+            }
+            scanner.close();
+        } catch (Exception e) {
+            System.out.println("Exception in fetching public IP: " + e.getMessage());
+        }
+        return ip;
     }
 
     @GetMapping("/trends")

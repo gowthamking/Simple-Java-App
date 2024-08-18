@@ -36,7 +36,7 @@ public class RepositoryDetailsController {
         GHRepositorySearchBuilder builder = github.searchRepositories();
 
         String publicIp = getPublicIp();
-        return "Welcome to BigID Project-V1\n" +
+        return "Welcome to BigID Project-V2\n" +
                "Your public IP address is: " + publicIp;
     }
 

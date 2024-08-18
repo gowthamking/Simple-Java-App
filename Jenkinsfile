@@ -113,7 +113,7 @@ environment {
           steps {
             script {
                echo '<--------------- Deploy Started --------------->'
-               sh 'helm install simplejava simplejava-0.1.0.tgz'
+               sh 'helm upgrade --install simplejava simplejava-0.1.0.tgz'
                echo '<--------------- Deploy Ends --------------->'
             }
           }

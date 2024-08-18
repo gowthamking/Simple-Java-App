@@ -114,7 +114,8 @@ environment {
             script {
                echo '<--------------- Deploy Started --------------->'
             //    sh 'helm uninstall simplejava || true'
-               sh 'helm install simplejava simplejava-0.1.0.tgz'
+            //    sh 'helm install simplejava simplejava-0.1.0.tgz'
+               sh 'helm upgrade --install simplejava simplejava-0.1.0.tgz --recreate-pods'
                echo '<--------------- Deploy Ends --------------->'
             }
           }

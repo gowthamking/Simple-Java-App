@@ -109,7 +109,7 @@ environment {
                 }
             }
 
-        stage(" Deploy ") {
+        stage(" Helm Deploy ") {
           steps {
             script {
                echo '<--------------- Deploy Started --------------->'

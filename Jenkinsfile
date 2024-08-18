@@ -152,7 +152,8 @@ environment {
         to: 'gowtham.zippy@gmail.com',
         from: 'jenkins@example.com',
         replyTo: 'jenkins@example.com',
-        mimeType: 'text/html'
+        mimeType: 'text/html',
+        attachmentsPattern: 'trivy-report.html'
  )
  }
  }

@@ -17,7 +17,7 @@ spec:
       - name: jfrogcred
       containers:
       - name:  bigid-java
-        image: gowzip.jfrog.io/test-docker-local/simplejava:2.1.2
+        image: gowzip.jfrog.io/test-docker-local/simplejava:2.1.3
         imagePullPolicy: Always
         ports:
         - containerPort: 8000

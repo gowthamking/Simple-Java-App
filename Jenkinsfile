@@ -1,6 +1,6 @@
 def registry = 'https://gowzip.jfrog.io/'
 def imageName = 'gowzip.jfrog.io/test-docker-local/simplejava'
-def version   = '2.1.2'
+def version   = '2.1.3'
 pipeline {
     agent {
         node {
